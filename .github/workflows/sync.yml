@@ -2,9 +2,9 @@ name: Auto Sync Upstream
 
 on:
   schedule:
-    #  Cron 表达式：每天 UTC 时间 00:00 (北京时间早 8:00) 自动触发一次
+    # 每天 UTC 时间 00:00 (北京时间早 8:00) 自动触发
     - cron: '0 0 * * *'
-  # 支持手动在 Actions 页面点击按钮立即触发同步
+  # 支持在 Actions 页面手动点击运行
   workflow_dispatch:
 
 jobs:
@@ -15,16 +15,12 @@ jobs:
     steps:
     - name: Checkout target repo
       uses: actions/checkout@v4
-      with:
-        # 必须设为 0，拉取完整历史，避免合产生冲突
-        fetch-depth: 0
 
-    - name: Sync upstream changes
-      uses: abranches/upstream-sync-action@v1.5
+    - name: Sync Upstream
+      uses: a20185/Upstream-Sync@v2.0
       with:
-        # 上游原仓库的主分支名称（通常是 main 或 master，根据原仓库修改）
-        upstream_sync_branch: main
-        # 你的 Fork 仓库的目标分支名称
-        target_sync_branch: main
-        # 原仓库的 GitHub 相对路径
-        upstream_sync_repo: FGBLH/HKL
+        upstream_repo: FGBLH/HKL
+        upstream_branch: main
+        target_branch: main
+        # 强制同步（覆写本地改动，保持和上游完全一致）
+        force: true
