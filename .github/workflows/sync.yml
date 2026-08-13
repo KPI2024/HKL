@@ -2,8 +2,9 @@ name: Auto Sync Upstream
 
 on:
   schedule:
-    # 每天 UTC 时间 00:00 (北京时间早 8:00) 自动同步
-    - cron: '0 0 * * *'
+    # 对应的 UTC 时间为：23:00 (前一天), 07:00, 14:00
+    # 换算成北京时间即为：早上 07:00、下午 15:00、晚上 22:00
+    - cron: '0 23,7,14 * * *'
   # 支持手动在 Actions 页面点击运行
   workflow_dispatch:
 
@@ -18,5 +19,4 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # 使用 GitHub 官方 CLI 直接同步上游仓库的 main 分支
           gh repo sync ${{ github.repository }} -b main
